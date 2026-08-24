@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+
+
+
+Sitemap: https://www.befaredindia.net/sitemap.xml
