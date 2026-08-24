@@ -1,0 +1,222 @@
+
+
+/* 
+==========================================================
+ Application: Responsive Feedback Form
+ Copyright 2024 - Present, All Rights Reserved
+ Developer: Sagar Autade | mipl.co.in
+ ==========================================================
+ File: form.css
+ File Date: 09-10-2024
+ Description:
+ Responsive Feedback Form
+ ==========================================================
+*/
+.form-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.input-field,
+.select-field {
+    width: 48%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.input-field.full-width,
+.select-field.full-width {
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.submit-button {
+    background-color: #053f67;
+    color: white;
+    padding: 10px 26px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    outline: none;
+}
+
+.submit-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.submit-button:hover {
+    background-color: #00a1e3;
+}
+
+.button-group {
+    text-align: right;
+    width: 100%;
+}
+
+.file-upload-group {
+    width: 100%;
+}
+
+.otp-section {
+    width: 100%;
+}
+
+.otp-input {
+    width: 100% !important;
+}
+
+.otp-message {
+    width: 100%;
+    margin: 5px 0;
+    font-size: 14px;
+    display: block;
+    padding: 0;
+    border-radius: 4px;
+    background-color: transparent;
+    min-height: 0;
+}
+
+.otp-message:empty {
+    display: none;
+}
+
+.otp-message.success {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    padding: 8px;
+}
+
+.otp-message.error {
+    color: #c62828;
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    padding: 8px;
+}
+
+.resend-button {
+    background-color: #666;
+}
+
+.resend-button:hover {
+    background-color: #888;
+}
+
+.resend-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.otp-message.info {
+    color: #1565c0;
+    background-color: #e3f2fd;
+    border: 1px solid #bbdefb;
+    padding: 8px;
+}
+
+.select-field {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+    padding: 8px;
+    /* Match input padding */
+    border: 1px solid #ccc;
+    /* Match input border */
+    border-radius: 5px;
+    /* Match input border radius */
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,7"/></svg>') no-repeat right 10px center;
+    background-size: 10px 10px;
+}
+
+.select-field option:first-child {
+    color: #999;
+    /* Light color for placeholder */
+}
+
+.select-field option:disabled {
+    display: none;
+    /* Hide the placeholder */
+}
+
+@media (max-width: 768px) {
+
+    .input-field,
+    .select-field {
+        width: 100%;
+    }
+
+}
+#loadingIndicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /*change these sizes to fit into your project*/
+    width: 100px;
+    height: 100px;
+}
+#loadingIndicator hr {
+    border: 0;
+    margin: 0;
+    width: 40%;
+    height: 40%;
+    position: absolute;
+    border-radius: 50%;
+    animation: spin 2s ease infinite
+}
+#loadingIndicator :first-child {
+    background: #19A68C;
+    animation-delay: -1.5s
+}
+#loadingIndicator :nth-child(2) {
+    background: #F63D3A;
+    animation-delay: -1s
+}
+#loadingIndicator :nth-child(3) {
+    background: #FDA543;
+    animation-delay: -0.5s
+}
+#loadingIndicator :last-child {
+    background: #193B48
+}
+@keyframes spin {
+    0%,
+    100% {
+        transform: translate(0)
+    }
+    25% {
+        transform: translate(160%)
+    }
+    50% {
+        transform: translate(160%, 160%)
+    }
+    75% {
+        transform: translate(0, 160%)
+    }
+}
+.file-captcha-group{
+	width: 100%;
+}

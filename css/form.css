@@ -1,0 +1,65 @@
+/* CSS Document */
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+*  { margin:0px;
+     padding:0px;
+	 box-sizing:border-box;
+	 -webkit-box-sizing:border-box;
+	 -moz-box-sizing:border-box;
+	 }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0px;
+}
+.inputField {
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
+	width: 100%;
+	height:37px;
+	padding: 5px 5px 5px 10px;
+	margin-bottom: 20px;
+	border:1px solid #B9B9B9;
+	resize:none;
+	}
+textarea { display:block; width:100%; margin-bottom:10px; line-height:20px; padding-left:5px; border:1px solid #B9B9B9;}
+textarea:last-of-type { height:89px;}
+.capchaImage { width:100%; margin:10px auto;}
+.formButton { padding:5px 10px; background-color:#d7d4b5; cursor:pointer; display:inline-block; margin-right:5px;}
+.clear {
+	clear: both;
+}
+@media screen and (min-width:481px) {
+.LeftForm {
+	float: none;
+
+	padding-right: 10px;
+}
+.RightForm {
+	float: none;
+
+}
+	}
+@media screen and (max-width:480px) {
+.LeftForm {
+	float: none;
+	width: 99%;
+	padding-right: 0px;
+	margin:0px auto;
+}
+.RightForm {
+	float: none;
+	width: 99%;
+	padding-right: 0px;
+	margin:0px auto;
+}
+.inputField {
+	margin:5px 0px;	
+	}
+.capchaImage { text-align:center;}
+.buttonWrapper { margin:auto; text-align:center;}
+}
