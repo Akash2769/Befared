@@ -3,4 +3,4 @@ Allow: /
 
 
 
-Sitemap: https://www.befaredindia.net/sitemap.xml
+Sitemap: https://www.befared.in/sitemap.xml
