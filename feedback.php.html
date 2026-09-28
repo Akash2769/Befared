@@ -243,6 +243,10 @@
     <input required maxlength="100" name="Address" class="input-field" placeholder="Address / City / Location :*" />
     <textarea required name="Requirements" class="input-field full-width" placeholder="Requirements Details :*"></textarea>
     <div class="h-captcha" data-captcha="true"></div>
+    <div class="h-captcha" data-captcha="true"></div>
+<div id="captchaError" style="display:none; color:#d93025; font-size:14px; margin:6px 0 10px;">
+  Please verify captcha
+</div>
     <div class="button-group">
       <button type="submit" class="submit-button">Submit</button>
       <input type="reset" value="Reset" class="submit-button" />
@@ -427,15 +431,29 @@
   <!--live chat ends-->
   <script src="https://web3forms.com/client/script.js" async defer></script>
   <script>
-  const form = document.getElementById('enquiryForm');
-  form.addEventListener('submit', function(e) {
-    const hCaptcha = form.querySelector('textarea[name=h-captcha-response]');
-    if (!hCaptcha || !hCaptcha.value) {
+(function () {
+  var form = document.getElementById('enquiryForm');
+  var error = document.getElementById('captchaError');
+
+  function captchaValue() {
+    var field = form.querySelector('[name="h-captcha-response"]');
+    return field ? field.value : '';
+  }
+
+  form.addEventListener('submit', function (e) {
+    if (!captchaValue()) {
       e.preventDefault();
-      alert("Please fill out captcha field");
+      error.style.display = 'block';
+      error.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
-  </script>
+
+  // Hide the error as soon as the captcha is solved
+  setInterval(function () {
+    if (captchaValue()) error.style.display = 'none';
+  }, 500);
+})();
+</script>
 
   </body>
   </html>
