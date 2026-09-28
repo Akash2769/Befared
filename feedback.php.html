@@ -194,48 +194,30 @@
 			<div class="row">
 
 				<div class="form-container">
-					<form id="enquiryForm" enctype="multipart/form-data">
+					<form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="PASTE_YOUR_ACCESS_KEY">
+  <input type="hidden" name="subject" value="New enquiry from befared.in">
+  <input type="hidden" name="from_name" value="Befared Website">
+  <input type="hidden" name="redirect" value="https://www.befared.in/thank-you.html">
+  <input type="checkbox" name="botcheck" style="display:none">
 
-						<input name="MIDHoney" data-name="Full Name" style="display: none;" maxlength="100"
-							placeholder="Enter text :*" tabindex="1" />
-						<input required maxlength="100" name="companyname" data-name="Company Name" class="input-field"
-							placeholder="Name of Company :*" />
-						<input required maxlength="100" name="contactperson" data-name="Contact Person" class="input-field"
-							placeholder="Name of Contact Person :*" tabindex="2" />
-						<input type="tel" pattern="(\+?[0-9]{1,4})?([0-9]{10})" required maxlength="100" name="telno" class="input-field" data-name="Contact Number"
-							placeholder="Tel. No. / Cell No. :*" />
-						<input required maxlength="100" name="emailid" data-name="Email-Id" class="input-field"
-							placeholder="Email :*" />
-						<select required name="country" data-name="Country" class="input-field select-field">
+  <input required maxlength="100" name="Company Name" class="input-field" placeholder="Name of Company :*" />
+  <input required maxlength="100" name="name" class="input-field" placeholder="Name of Contact Person :*" />
+  <input required type="tel" pattern="(\+?[0-9]{1,4})?([0-9]{10})" name="Phone" class="input-field" placeholder="Tel. No. / Cell No. :*" />
+  <input required type="email" name="email" class="input-field" placeholder="Email :*" />
+  <input required maxlength="100" name="Country" class="input-field" placeholder="Country :*" />
+  <input required maxlength="100" name="Address" class="input-field" placeholder="Address / City / Location :*" />
+  <textarea required name="Requirements" class="input-field full-width" placeholder="Requirements Details :*"></textarea>
 
-						</select>
-						<input required data-name="Address" maxlength="100" name="address" class="input-field"
-							placeholder="Address / City / Location :*" />
-						<textarea required name="requirements" data-name="Requirement Details" class="input-field full-width"
-							placeholder="Requirements Details :*"></textarea>
+  <div class="h-captcha" data-captcha="true"></div>
 
-						<div class="file-upload-group">
-							<input type="file" name="attachment" id="attachment" class="input-field" />
-						</div>
-						
-						<!--- Start---->
-						<div id="otpSection" class="otp-section" style="display: none;">
-							<input type="text" id="otpInput" name="otp" class="input-field otp-input"
-								placeholder="Enter 6-digit OTP :*" maxlength="6" 
-								onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
-						</div>
+  <div class="button-group">
+    <button type="submit" class="submit-button">Submit</button>
+    <input type="reset" value="Reset" class="submit-button" />
+  </div>
+</form>
 
-						<div id="otpMessage" class="otp-message"></div>
-
-						<div class="button-group">
-							<button type="button" id="sendOtpBtn" class="submit-button">Send OTP</button>
-							<button type="button" id="verifyOtpBtn" class="submit-button" style="display: none;">Verify OTP</button>
-							<button type="button" id="resendOtpBtn" class="submit-button resend-button" style="display: none;">Resend OTP</button>
-							<input type="reset" value="Reset" class="submit-button" />
-						</div>
-						<!---End-->
-						
-					</form>
+<script src="https://web3forms.com/client/script.js" async defer></script>
 					<div id="loadingIndicator" style="display: none;">
 						<hr />
 						<hr />
@@ -250,7 +232,6 @@
 		</div>
 	</div>
 	<!-- script-->
-	<script src="enquiry/enquiry.js"></script>
             <!-- Section: About -->
             <section>
               <div class="row">
