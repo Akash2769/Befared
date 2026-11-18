@@ -190,18 +190,21 @@
     <div class="section-content">
       <div class="twm-contact-section">
         <div class="row">
-          <div class="form-container">
-            <form id="enquiryForm" action="https://api.web3forms.com/submit" method="POST">
-    <input type="hidden" name="access_key" value="41674e91-8ce2-4619-bae9-911398da15f4">
-    <input type="hidden" name="subject" value="New enquiry from befared.in">
-    <input type="hidden" name="from_name" value="Befared Website">
-    <input type="hidden" name="redirect" value="https://www.befared.in/thank-you.html">
-    <input type="checkbox" name="botcheck" style="display:none">
-    <input required maxlength="100" name="Company Name" class="input-field" placeholder="Name of Company :*" />
-    <input required maxlength="100" name="name" class="input-field" placeholder="Name of Contact Person :*" />
-    <input required type="tel" pattern="(\+?[0-9]{1,4})?([0-9]{10})" name="Phone" class="input-field" placeholder="Tel. No. / Cell No. :*" />
-    <input required type="email" name="email" class="input-field" placeholder="Email :*" />
-    <select required name="Country" class="input-field select-field">
+          <div class="form-container" id="box">
+  <form id="enquiryForm" onsubmit="send(event)">
+
+    <!-- Honeypot for Supabase (hidden from humans) -->
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"
+           style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+    <!-- Web3Forms botcheck -->
+    <input type="checkbox" name="botcheck" id="botcheck" style="display:none">
+
+    <input required maxlength="100" id="c"  name="Company Name" class="input-field" placeholder="Name of Company :*" />
+    <input required maxlength="100" id="n"  name="name" class="input-field" placeholder="Name of Contact Person :*" />
+    <input required type="tel" pattern="(\+?[0-9]{1,4})?([0-9]{10})" id="mb" name="Phone" class="input-field" placeholder="Tel. No. / Cell No. :*" />
+    <input required type="email" id="em" name="email" class="input-field" placeholder="Email :*" />
+
+    <select required id="co" name="Country" class="input-field select-field">
     <option value="">Select Country :*</option>
     <option value="India" selected>India</option>
     <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Andorra</option>
@@ -240,18 +243,22 @@
     <option>Vietnam</option><option>Yemen</option><option>Zambia</option><option>Zimbabwe</option>
     <option>Other</option>
   </select>
-    <input required maxlength="100" name="Address" class="input-field" placeholder="Address / City / Location :*" />
-    <textarea required name="Requirements" class="input-field full-width" placeholder="Requirements Details :*"></textarea>
+    <input required maxlength="100" id="ct" name="Address" class="input-field" placeholder="Address / City / Location :*" />
+    <textarea required id="ms" name="Requirements" class="input-field full-width" placeholder="Requirements Details :*"></textarea>
+
     <div class="h-captcha" data-captcha="true"></div>
-<div id="captchaError" style="display:none; color:#d93025; font-size:14px; margin:6px 0 10px;">
-  Please verify captcha
-</div>
+    <div id="captchaError" style="display:none; color:#d93025; font-size:14px; margin:6px 0 10px;">
+      Please verify captcha
+    </div>
+
+    <div id="m" class="msg" style="margin:6px 0 10px;font-size:14px;"></div>
+
     <div class="button-group">
-      <button type="submit" class="submit-button">Submit</button>
+      <button type="submit" id="go" class="submit-button">Submit</button>
       <input type="reset" value="Reset" class="submit-button" />
     </div>
   </form>
-  </div>
+</div>
         </div>
       </div>
     </div>
@@ -430,28 +437,104 @@
   <!--live chat ends-->
   <script src="https://web3forms.com/client/script.js" async defer></script>
   <script>
-(function () {
-  var form = document.getElementById('enquiryForm');
-  var error = document.getElementById('captchaError');
+const FN  = 'https://nfqssvbbkyapqnjbojjw.supabase.co/functions/v1/public-forms';
+const W3F = 'https://api.web3forms.com/submit';
+const W3F_KEY = '41674e91-8ce2-4619-bae9-911398da15f4';
 
-  function captchaValue() {
-    var field = form.querySelector('[name="h-captcha-response"]');
-    return field ? field.value : '';
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function send(e){
+  e.preventDefault();
+  const m = document.getElementById('m'), go = document.getElementById('go');
+  const err = document.getElementById('captchaError');
+  const g = x => document.getElementById(x).value.trim();
+
+  // Captcha check (required by Web3Forms)
+  const capField = document.querySelector('#enquiryForm [name="h-captcha-response"]');
+  const captcha = capField ? capField.value : '';
+  if (!captcha) {
+    err.style.display = 'block';
+    err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
+  err.style.display = 'none';
 
-  form.addEventListener('submit', function (e) {
-    if (!captchaValue()) {
-      e.preventDefault();
-      error.style.display = 'block';
-      error.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+  go.disabled = true; m.className = 'msg'; m.style.color = ''; m.textContent = 'Sending…';
+
+  const country = g('co');
+
+  // 1) Supabase payload
+  const supaBody = {
+    kind: 'enquiry',
+    full_name: g('n'),
+    company: g('c'),
+    mobile: g('mb'),
+    email: g('em'),
+    city: g('ct'),
+    gstin: '',
+    product: '',
+    quantity: '',
+    message: g('ms') + (country ? '\n\nCountry: ' + country : ''),
+    src: (new URLSearchParams(location.search).get('src') || '').slice(0, 40),
+    website: g('website')
+  };
+
+  // 2) Web3Forms payload (generates the email)
+  const mailBody = {
+    access_key: W3F_KEY,
+    subject: 'New enquiry from befared.in',
+    from_name: 'Befared Website',
+    'Company Name': g('c'),
+    name: g('n'),
+    Phone: g('mb'),
+    email: g('em'),
+    Country: country,
+    Address: g('ct'),
+    Requirements: g('ms'),
+    'h-captcha-response': captcha
+  };
+
+  const post = (url, data) => fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
   });
 
-  // Hide the error as soon as the captcha is solved
-  setInterval(function () {
-    if (captchaValue()) error.style.display = 'none';
-  }, 500);
-})();
+  const [supaRes, mailRes] = await Promise.allSettled([
+    post(FN, supaBody),
+    post(W3F, mailBody)
+  ]);
+
+  let supaOk = false, enquiryNo = '', supaErr = '';
+  if (supaRes.status === 'fulfilled') {
+    try {
+      const j = await supaRes.value.json();
+      supaOk = supaRes.value.ok;
+      if (supaOk) enquiryNo = j.no || '';
+      else supaErr = j.error || '';
+    } catch (_) {}
+  }
+
+  let mailOk = false, mailErr = '';
+  if (mailRes.status === 'fulfilled') {
+    try {
+      const j = await mailRes.value.json();
+      mailOk = mailRes.value.ok && j.success !== false;
+      if (!mailOk) mailErr = j.message || '';
+    } catch (_) {}
+  }
+
+  if (supaOk || mailOk) {
+    document.getElementById('box').innerHTML =
+      '<div class="done"><b>Thank you.</b> Your enquiry' + (enquiryNo ? ' (' + esc(enquiryNo) + ')' : '') +
+      ' has reached Befared. We will call or write to you soon.</div>';
+  } else {
+    m.className = 'msg err'; m.style.color = '#d93025';
+    m.textContent = supaErr || mailErr || 'Could not send. Please check your internet and try again.';
+    go.disabled = false;
+    if (window.hcaptcha) { try { hcaptcha.reset(); } catch (_) {} }
+  }
+}
 </script>
 
   </body>
